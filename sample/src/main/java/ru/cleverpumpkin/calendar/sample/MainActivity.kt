@@ -8,7 +8,7 @@ import ru.cleverpumpkin.calendar.sample.dateboundaries.DateBoundariesDemoFragmen
 import ru.cleverpumpkin.calendar.sample.demolist.DemoItem
 import ru.cleverpumpkin.calendar.sample.demolist.DemoListFragment
 import ru.cleverpumpkin.calendar.sample.dialog.DialogDemoFragment
-import ru.cleverpumpkin.calendar.sample.events.EventListDemoFragment
+import ru.cleverpumpkin.calendar.sample.events.EventListDemoJavaFragment
 import ru.cleverpumpkin.calendar.sample.selection.SelectionModesDemoFragment
 
 class MainActivity : AppCompatActivity(), DemoListFragment.OnDemoItemSelectionListener {
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), DemoListFragment.OnDemoItemSelectionLi
             DemoItem.SELECTION -> SelectionModesDemoFragment()
             DemoItem.DATE_BOUNDARIES -> DateBoundariesDemoFragment()
             DemoItem.STYLING -> CodeStylingDemoFragment()
-            DemoItem.EVENTS -> EventListDemoFragment()
+            DemoItem.EVENTS -> EventListDemoJavaFragment()
             DemoItem.DIALOG -> DialogDemoFragment()
         }
 
