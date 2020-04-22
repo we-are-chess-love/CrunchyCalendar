@@ -143,7 +143,6 @@ internal class CalendarAdapter(
         dateView.isDateDisabled =
             dateInfoProvider.isDateOutOfRange(date) || dateInfoProvider.isDateSelectable(date).not()
 
-        dateView.isWeekend = dateInfoProvider.isWeekend(date)
         dateView.dayNumber = dayFormatter.format(date.date)
 
         dateView.setBackgroundResource(styleAttributes.dateCellBackgroundColorRes)

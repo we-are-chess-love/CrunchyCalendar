@@ -70,8 +70,6 @@ class CalendarView @JvmOverloads constructor(
         private const val BUNDLE_LIMIT_DATE_RANGE = "ru.cleverpumpkin.calendar.limit_date_range"
         private const val BUNDLE_SELECTION_MODE = "ru.cleverpumpkin.calendar.selection_mode"
         private const val BUNDLE_FIRST_DAY_OF_WEEK = "ru.cleverpumpkin.calendar.first_day_of_week"
-        private const val BUNDLE_SHOW_YEAR_SELECTION_VIEW =
-            "ru.cleverpumpkin.calendar.show_year_selection_view"
     }
 
     /**

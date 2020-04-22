@@ -45,10 +45,11 @@ class DateBoundariesDemoFragment : BaseFragment() {
         val maxDate = CalendarDate(calendar.time)
 
         calendarView.setupCalendar(
-            initialDate = initialDate,
-            minDate = minDate,
-            maxDate = maxDate,
-            selectionMode = CalendarView.SelectionMode.SINGLE
+                initialDate = initialDate,
+                selectedDates = listOf(initialDate),
+                minDate = minDate,
+                maxDate = maxDate,
+                selectionMode = CalendarView.SelectionMode.SINGLE
         )
 
     }

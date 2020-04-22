@@ -8,6 +8,8 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.AttrRes
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import ru.cleverpumpkin.calendar.extension.dpToPix
 import ru.cleverpumpkin.calendar.extension.getColorInt
 import ru.cleverpumpkin.calendar.extension.spToPix
@@ -32,7 +34,6 @@ internal class CalendarDateView @JvmOverloads constructor(
         private val stateToday = intArrayOf(R.attr.calendar_state_today)
         private val stateDateSelected = intArrayOf(R.attr.calendar_state_selected)
         private val stateDateDisabled = intArrayOf(R.attr.calendar_state_disabled)
-        private val stateWeekend = intArrayOf(R.attr.calendar_state_weekend)
     }
 
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -70,14 +71,6 @@ internal class CalendarDateView @JvmOverloads constructor(
             isLongClickable = value.not()
         }
 
-    var isWeekend: Boolean = false
-        set(value) {
-            if (value != field) {
-                field = value
-                refreshDrawableState()
-            }
-        }
-
     var dayNumber: String = ""
         set(value) {
             field = value
@@ -93,6 +86,13 @@ internal class CalendarDateView @JvmOverloads constructor(
 
         val xPos = width / 2.0f
         val yPos = height / 2.0f - (textPaint.descent() + textPaint.ascent()) / 2.0f
+        val y = height / 2.0f
+
+        if (isDateSelected) {
+            drawCircle(xPos, y, 48f, Paint().apply {
+                color = ContextCompat.getColor(context, R.color.calendar_date_selected_background)
+            })
+        }
 
         drawText(dayNumber, xPos - (dayNumberCalculatedWidth / 2.0f), yPos, textPaint)
     }
@@ -115,10 +115,6 @@ internal class CalendarDateView @JvmOverloads constructor(
 
         if (isDateDisabled) {
             mergeDrawableStates(drawableState, stateDateDisabled)
-        }
-
-        if (isWeekend) {
-            mergeDrawableStates(drawableState, stateWeekend)
         }
 
         return drawableState

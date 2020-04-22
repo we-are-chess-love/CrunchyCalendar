@@ -23,7 +23,7 @@ internal class SingleDateSelectionStrategy(
         }
 
         if (selectedDate == date) {
-            selectedDate = null
+            return
         } else {
             val previousSelectedDate = selectedDate
             selectedDate = date
