@@ -4,10 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarDateView
+import ru.cleverpumpkin.calendar.DaysBarView
 import ru.cleverpumpkin.calendar.R
 import ru.cleverpumpkin.calendar.adapter.CalendarAdapter.Companion.DATE_VIEW_TYPE
 import ru.cleverpumpkin.calendar.adapter.CalendarAdapter.Companion.EMPTY_VIEW_TYPE
@@ -102,7 +104,7 @@ internal class CalendarAdapter(
 
     private fun createMonthItemViewHolder(parent: ViewGroup): MonthItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.calendar_item_month, parent, false)
-        return MonthItemViewHolder(view as TextView)
+        return MonthItemViewHolder(view as LinearLayout)
     }
 
     private fun createEmptyItemViewHolder(context: Context): EmptyItemViewHolder {
@@ -142,7 +144,6 @@ internal class CalendarAdapter(
             dateInfoProvider.isDateOutOfRange(date) || dateInfoProvider.isDateSelectable(date).not()
 
         dateView.isWeekend = dateInfoProvider.isWeekend(date)
-        dateView.dateIndicators = dateInfoProvider.getDateIndicators(date)
         dateView.dayNumber = dayFormatter.format(date.date)
 
         dateView.setBackgroundResource(styleAttributes.dateCellBackgroundColorRes)
@@ -151,8 +152,9 @@ internal class CalendarAdapter(
 
     private fun bindMonthItemViewHolder(holder: MonthItemViewHolder, monthItem: MonthItem) {
         val monthName = monthFormatter.format(monthItem.date.date)
-        holder.textView.text = monthName.capitalize()
-        holder.textView.setTextColor(styleAttributes.monthTextColor)
+        val textView = holder.monthLayout.findViewById<TextView>(R.id.calendar_month)
+        textView.text = monthName.capitalize()
+        textView.setTextColor(styleAttributes.monthTextColor)
     }
 
     // endregion View Binding
@@ -221,7 +223,14 @@ internal class CalendarAdapter(
 
     class DateItemViewHolder(val dateView: CalendarDateView) : RecyclerView.ViewHolder(dateView)
 
-    class MonthItemViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+    class MonthItemViewHolder(val monthLayout: LinearLayout) : RecyclerView.ViewHolder(monthLayout) {
+
+        private val daysBar: DaysBarView = monthLayout.findViewById(R.id.calendar_days_bar_view)
+
+        init {
+            daysBar.setupDaysBarView(Calendar.getInstance().firstDayOfWeek)
+        }
+    }
 
     class EmptyItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

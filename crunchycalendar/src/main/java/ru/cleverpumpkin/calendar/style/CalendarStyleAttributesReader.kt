@@ -31,21 +31,6 @@ internal object CalendarStyleAttributesReader {
                     gridColor
                 )
 
-                yearSelectionBackground = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_year_selection_background,
-                    yearSelectionBackground
-                )
-
-                yearSelectionArrowsColor = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_year_selection_arrows_color,
-                    yearSelectionArrowsColor
-                )
-
-                yearSelectionTextColor = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_year_selection_text_color,
-                    yearSelectionTextColor
-                )
-
                 daysBarBackground = typedArray.getColor(
                     R.styleable.CalendarView_calendar_day_bar_background,
                     daysBarBackground

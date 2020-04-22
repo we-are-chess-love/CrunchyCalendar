@@ -1,15 +1,31 @@
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/calendar_month_view_height"
-    android:ellipsize="middle"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/calendar_margin_medium"
-    android:paddingLeft="@dimen/calendar_margin_medium"
-    android:paddingEnd="@dimen/calendar_margin_medium"
-    android:paddingRight="@dimen/calendar_margin_medium"
-    android:singleLine="true"
-    android:textSize="@dimen/calendar_month_text_size"
-    tools:text="February 2017" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/calendar_month"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/calendar_month_view_height"
+        android:ellipsize="middle"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/calendar_margin_medium"
+        android:paddingLeft="@dimen/calendar_margin_medium"
+        android:paddingEnd="@dimen/calendar_margin_medium"
+        android:paddingRight="@dimen/calendar_margin_medium"
+        android:singleLine="true"
+        android:textSize="@dimen/calendar_month_text_size"
+        tools:text="February 2017" />
+
+    <ru.cleverpumpkin.calendar.DaysBarView
+        android:id="@+id/calendar_days_bar_view"
+        style="@style/CalendarWeekDaysBar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/calendar_days_of_week_bar_shadow" />
+
+</LinearLayout>

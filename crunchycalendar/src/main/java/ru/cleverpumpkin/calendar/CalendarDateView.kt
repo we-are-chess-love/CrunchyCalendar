@@ -28,9 +28,6 @@ internal class CalendarDateView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_TEXT_SIZE = 14.0f
-        private const val INDICATOR_RADIUS = 3.5f
-        private const val SPACE_BETWEEN_INDICATORS = 4.0f
-        private const val MAX_INDICATORS_COUNT = 4
 
         private val stateToday = intArrayOf(R.attr.calendar_state_today)
         private val stateDateSelected = intArrayOf(R.attr.calendar_state_selected)
@@ -38,15 +35,8 @@ internal class CalendarDateView @JvmOverloads constructor(
         private val stateWeekend = intArrayOf(R.attr.calendar_state_weekend)
     }
 
-    private val radiusPx = context.dpToPix(INDICATOR_RADIUS)
-    private val spacePx = context.dpToPix(SPACE_BETWEEN_INDICATORS)
-
     private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = context.spToPix(DEFAULT_TEXT_SIZE)
-    }
-
-    private val indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
     }
 
     private var dayNumberCalculatedWidth = 0.0f
@@ -94,14 +84,8 @@ internal class CalendarDateView @JvmOverloads constructor(
             dayNumberCalculatedWidth = textPaint.measureText(value)
         }
 
-    var dateIndicators: List<CalendarView.DateIndicator> = emptyList()
-        set(indicators) {
-            field = indicators.take(MAX_INDICATORS_COUNT)
-        }
-
     override fun onDraw(canvas: Canvas) {
         canvas.drawDayNumber()
-        canvas.drawIndicators()
     }
 
     private fun Canvas.drawDayNumber() {
@@ -111,25 +95,6 @@ internal class CalendarDateView @JvmOverloads constructor(
         val yPos = height / 2.0f - (textPaint.descent() + textPaint.ascent()) / 2.0f
 
         drawText(dayNumber, xPos - (dayNumberCalculatedWidth / 2.0f), yPos, textPaint)
-    }
-
-    private fun Canvas.drawIndicators() {
-        if (dateIndicators.isEmpty()) {
-            return
-        }
-
-        val indicatorsCount = dateIndicators.size
-        val drawableAreaWidth = radiusPx * 2.0f * indicatorsCount + spacePx * (indicatorsCount - 1)
-
-        var xPos = ((width - drawableAreaWidth) / 2.0f) + radiusPx
-        val yPos = height - height / 6.0f
-
-        dateIndicators.forEach { indicator ->
-            indicatorPaint.color = indicator.color
-            drawCircle(xPos, yPos, radiusPx, indicatorPaint)
-
-            xPos += radiusPx * 2.0f + spacePx
-        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

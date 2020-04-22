@@ -14,19 +14,10 @@ import ru.cleverpumpkin.calendar.extension.getColorInt
 internal class CalendarStyleAttributes(
     context: Context,
 
-    var drawGridOnSelectedDates: Boolean = true,
+    var drawGridOnSelectedDates: Boolean = false,
 
     @ColorInt
     var gridColor: Int = context.getColorInt(R.color.calendar_grid_color),
-
-    @ColorInt
-    var yearSelectionBackground: Int = context.getColorInt(R.color.calendar_year_selection_background),
-
-    @ColorInt
-    var yearSelectionArrowsColor: Int = context.getColorInt(R.color.calendar_year_selection_arrows_color),
-
-    @ColorInt
-    var yearSelectionTextColor: Int = context.getColorInt(R.color.calendar_year_selection_text_color),
 
     @ColorInt
     var daysBarBackground: Int = context.getColorInt(R.color.calendar_days_bar_background),

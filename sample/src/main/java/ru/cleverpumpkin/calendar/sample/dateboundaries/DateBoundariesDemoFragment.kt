@@ -36,20 +36,19 @@ class DateBoundariesDemoFragment : BaseFragment() {
     private fun setupCalendar() {
         val calendar = Calendar.getInstance()
 
-        calendar.set(2018, Calendar.JUNE, 1)
         val initialDate = CalendarDate(calendar.time)
 
-        calendar.set(2018, Calendar.MAY, 28)
+        calendar.set(2020, Calendar.APRIL, 1)
         val minDate = CalendarDate(calendar.time)
 
-        calendar.set(2018, Calendar.JULY, 2)
+        calendar.set(2020, Calendar.JULY, 30)
         val maxDate = CalendarDate(calendar.time)
 
         calendarView.setupCalendar(
             initialDate = initialDate,
             minDate = minDate,
             maxDate = maxDate,
-            selectionMode = CalendarView.SelectionMode.MULTIPLE
+            selectionMode = CalendarView.SelectionMode.SINGLE
         )
 
     }

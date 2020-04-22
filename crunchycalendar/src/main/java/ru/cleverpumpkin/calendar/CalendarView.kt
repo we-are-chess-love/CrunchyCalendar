@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
@@ -18,11 +17,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.cleverpumpkin.calendar.adapter.CalendarAdapter
 import ru.cleverpumpkin.calendar.adapter.CalendarItemsGenerator
-import ru.cleverpumpkin.calendar.adapter.item.DateItem
-import ru.cleverpumpkin.calendar.adapter.item.MonthItem
 import ru.cleverpumpkin.calendar.adapter.manager.AdapterDataManager
 import ru.cleverpumpkin.calendar.adapter.manager.CalendarAdapterDataManager
 import ru.cleverpumpkin.calendar.decorations.GridDividerItemDecoration
+import ru.cleverpumpkin.calendar.decorations.NoItemDecoration
 import ru.cleverpumpkin.calendar.extension.getColorInt
 import ru.cleverpumpkin.calendar.selection.*
 import ru.cleverpumpkin.calendar.style.CalendarStyleAttributes
@@ -107,15 +105,12 @@ class CalendarView @JvmOverloads constructor(
      */
     private var hasBeenInitializedWithSetup = false
 
-    private val yearSelectionView: YearSelectionView
-    private val daysBarView: DaysBarView
     private val recyclerView: RecyclerView
     private val calendarAdapter: CalendarAdapter
 
     private var displayedDatesRange = DatesRange.emptyRange()
     private var minMaxDatesRange = NullableDatesRange()
     private var dateSelectionStrategy: DateSelectionStrategy = NoDateSelectionStrategy()
-    private val displayedYearUpdateListener = DisplayedYearUpdateListener()
     private val dateInfoProvider = DefaultDateInfoProvider()
     private val adapterDataManager: AdapterDataManager
     private lateinit var calendarItemsGenerator: CalendarItemsGenerator
@@ -145,18 +140,6 @@ class CalendarView @JvmOverloads constructor(
             }
         }
 
-    private var showYearSelectionView = true
-        set(value) {
-            field = value
-            recyclerView.removeOnScrollListener(displayedYearUpdateListener)
-
-            if (showYearSelectionView) {
-                yearSelectionView.visibility = View.VISIBLE
-                recyclerView.addOnScrollListener(displayedYearUpdateListener)
-            } else {
-                yearSelectionView.visibility = View.GONE
-            }
-        }
 
     private val defaultFirstDayOfWeek: Int
         get() = Calendar.getInstance().firstDayOfWeek
@@ -170,7 +153,7 @@ class CalendarView @JvmOverloads constructor(
     private var firstDayOfWeek: Int? = null
         set(value) {
             field = value
-            daysBarView.setupDaysBarView(firstDayOfWeek ?: defaultFirstDayOfWeek)
+
             calendarItemsGenerator = CalendarItemsGenerator(firstDayOfWeek ?: defaultFirstDayOfWeek)
         }
 
@@ -199,15 +182,6 @@ class CalendarView @JvmOverloads constructor(
      * Listener that will be notified when a date cell is long clicked.
      */
     var onDateLongClickListener: ((CalendarDate) -> Unit)? = null
-
-    /**
-     * Listener that will be notified when a year view is clicked.
-     */
-    var onYearClickListener: ((Int) -> Unit)? = null
-        set(value) {
-            field = value
-            yearSelectionView.onYearClickListener = value
-        }
 
     /**
      * Filter that is used to determine whether a date available for selection or not.
@@ -246,8 +220,6 @@ class CalendarView @JvmOverloads constructor(
     init {
         LayoutInflater.from(context).inflate(R.layout.calendar_view, this, true)
 
-        yearSelectionView = findViewById(R.id.calendar_year_selection_view)
-        daysBarView = findViewById(R.id.calendar_days_bar_view)
         recyclerView = findViewById(R.id.calendar_recycler_view)
 
         if (attrs != null) {
@@ -273,13 +245,6 @@ class CalendarView @JvmOverloads constructor(
         )
 
         adapterDataManager = CalendarAdapterDataManager(calendarAdapter)
-
-        daysBarView.applyStyle(calendarStyleAttributes)
-        yearSelectionView.applyStyle(calendarStyleAttributes)
-
-        yearSelectionView.onYearChangeListener = { displayedDate ->
-            moveToDate(displayedDate)
-        }
 
         setupRecyclerView(recyclerView)
     }
@@ -322,8 +287,8 @@ class CalendarView @JvmOverloads constructor(
         maxDate: CalendarDate? = null,
         selectionMode: SelectionMode = SelectionMode.NONE,
         selectedDates: List<CalendarDate> = emptyList(),
-        firstDayOfWeek: Int? = null,
-        showYearSelectionView: Boolean = true
+        firstDayOfWeek: Int? = null
+
     ) {
         if (minDate != null && maxDate != null && minDate > maxDate) {
             throw IllegalArgumentException("minDate must be before maxDate: $minDate, maxDate: $maxDate")
@@ -337,13 +302,8 @@ class CalendarView @JvmOverloads constructor(
 
         this.selectionMode = selectionMode
         this.firstDayOfWeek = firstDayOfWeek
-        this.showYearSelectionView = showYearSelectionView
         minMaxDatesRange = NullableDatesRange(dateFrom = minDate, dateTo = maxDate)
 
-        yearSelectionView.setupYearSelectionView(
-            displayedDate = initialDate,
-            minMaxDatesRange = minMaxDatesRange
-        )
 
         updateSelectedDatesInternal(selectedDates)
 
@@ -414,56 +374,10 @@ class CalendarView @JvmOverloads constructor(
     }
 
     /**
-     * Sets the year selection bar background color.
-     */
-    fun setYearSelectionBarBackgroundColor(@ColorInt color: Int) {
-        calendarStyleAttributes.yearSelectionBackground = color
-        yearSelectionView.applyStyle(calendarStyleAttributes)
-    }
-
-    /**
-     * Sets the year selection bar background color resource.
-     */
-    fun setYearSelectionBarBackgroundColorRes(@ColorRes colorRes: Int) {
-        setYearSelectionBarBackgroundColor(getColorInt(colorRes))
-    }
-
-    /**
-     * Sets the year selection bar arrows color.
-     */
-    fun setYearSelectionBarArrowsColor(@ColorInt color: Int) {
-        calendarStyleAttributes.yearSelectionArrowsColor = color
-        yearSelectionView.applyStyle(calendarStyleAttributes)
-    }
-
-    /**
-     * Sets the year selection bar arrows color resource.
-     */
-    fun setYearSelectionBarArrowsColorRes(@ColorRes colorRes: Int) {
-        setYearSelectionBarArrowsColor(getColorInt(colorRes))
-    }
-
-    /**
-     * Sets the year selection bar text color.
-     */
-    fun setYearSelectionBarTextColor(@ColorInt color: Int) {
-        calendarStyleAttributes.yearSelectionTextColor = color
-        yearSelectionView.applyStyle(calendarStyleAttributes)
-    }
-
-    /**
-     * Sets the year selection bar text color resource.
-     */
-    fun setYearSelectionBarTextColorRes(@ColorRes colorRes: Int) {
-        setYearSelectionBarTextColor(getColorInt(colorRes))
-    }
-
-    /**
      * Sets the days of week bar background color.
      */
     fun setDaysBarBackgroundColor(@ColorInt color: Int) {
         calendarStyleAttributes.daysBarBackground = color
-        daysBarView.applyStyle(calendarStyleAttributes)
     }
 
     /**
@@ -478,7 +392,6 @@ class CalendarView @JvmOverloads constructor(
      */
     fun setDaysBarTextColor(@ColorInt color: Int) {
         calendarStyleAttributes.daysBarTextColor = color
-        daysBarView.applyStyle(calendarStyleAttributes)
     }
 
     /**
@@ -631,7 +544,7 @@ class CalendarView @JvmOverloads constructor(
                 MAX_RECYCLED_EMPTY_VIEWS
             )
 
-            addItemDecoration(GridDividerItemDecoration(context, calendarStyleAttributes))
+            addItemDecoration(NoItemDecoration())
             addOnScrollListener(CalendarItemsGenerationListener())
         }
     }
@@ -721,8 +634,6 @@ class CalendarView @JvmOverloads constructor(
             putParcelable(BUNDLE_DISPLAY_DATE_RANGE, displayedDatesRange)
             putParcelable(BUNDLE_LIMIT_DATE_RANGE, minMaxDatesRange)
             putParcelable(BUNDLE_SUPER_STATE, superState)
-            putParcelable(BUNDLE_DISPLAYED_DATE, yearSelectionView.displayedDate)
-            putBoolean(BUNDLE_SHOW_YEAR_SELECTION_VIEW, showYearSelectionView)
             firstDayOfWeek?.let { putInt(BUNDLE_FIRST_DAY_OF_WEEK, it) }
             dateSelectionStrategy.saveSelectedDates(this)
         }
@@ -746,17 +657,8 @@ class CalendarView @JvmOverloads constructor(
             selectionMode = state.getSerializable(BUNDLE_SELECTION_MODE) as SelectionMode
             displayedDatesRange = state.getParcelable(BUNDLE_DISPLAY_DATE_RANGE) ?: DatesRange.emptyRange()
             minMaxDatesRange = state.getParcelable(BUNDLE_LIMIT_DATE_RANGE) ?: NullableDatesRange()
-            showYearSelectionView = state.getBoolean(BUNDLE_SHOW_YEAR_SELECTION_VIEW)
             firstDayOfWeek = state.getInt(BUNDLE_FIRST_DAY_OF_WEEK, -1).takeIf { it != -1 }
             dateSelectionStrategy.restoreSelectedDates(state)
-
-            val displayedDate: CalendarDate? = state.getParcelable(BUNDLE_DISPLAYED_DATE)
-            if (displayedDate != null) {
-                yearSelectionView.setupYearSelectionView(
-                    displayedDate = displayedDate,
-                    minMaxDatesRange = minMaxDatesRange
-                )
-            }
 
             generateCalendarItems(displayedDatesRange)
         } else {
@@ -805,23 +707,6 @@ class CalendarView @JvmOverloads constructor(
                 gridLayoutManager.findFirstVisibleItemPosition() == 0 -> {
                     recyclerView.post { generatePrevCalendarItems() }
                 }
-            }
-        }
-    }
-
-    private inner class DisplayedYearUpdateListener : RecyclerView.OnScrollListener() {
-
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            val gridLayoutManager = recyclerView.layoutManager as? GridLayoutManager ?: return
-
-            val firstChildAdapterPosition = gridLayoutManager.findFirstVisibleItemPosition()
-            val calendarItem = calendarAdapter.getCalendarItemAt(firstChildAdapterPosition)
-
-            when (calendarItem) {
-                is DateItem -> yearSelectionView.displayedDate = calendarItem.date
-                is MonthItem -> yearSelectionView.displayedDate = calendarItem.date
             }
         }
     }

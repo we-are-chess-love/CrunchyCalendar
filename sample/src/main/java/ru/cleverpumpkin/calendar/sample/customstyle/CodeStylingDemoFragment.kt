@@ -32,10 +32,6 @@ class CodeStylingDemoFragment : BaseFragment() {
             setDrawGridOnSelectedDates(drawGrid = true)
             setGridColorRes(R.color.custom_calendar_grid_color)
 
-            setYearSelectionBarBackgroundColorRes(R.color.custom_calendar_year_selection_background)
-            setYearSelectionBarArrowsColorRes(R.color.custom_calendar_year_selection_arrows_color)
-            setYearSelectionBarTextColorRes(R.color.custom_calendar_year_selection_text_color)
-
             setDaysBarBackgroundColorRes(R.color.custom_calendar_days_bar_background)
             setDaysBarTextColorRes(R.color.custom_calendar_days_bar_text_color)
 
