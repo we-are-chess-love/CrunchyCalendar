@@ -247,9 +247,6 @@ Define your custom style for the Calendar.
     <item name="calendar_year_selection_background">
         @color/custom_calendar_year_selection_background
     </item>
-    <item name="calendar_year_selection_text_color">
-        @color/custom_calendar_year_selection_text_color
-    </item>
 </style>
 ```
 
@@ -286,7 +283,6 @@ You can also set styles and colors programmatically:
      setGridColorRes(R.color.custom_calendar_grid_color)
      setYearSelectionBarBackgroundColorRes(R.color.custom_calendar_year_selection_background)
      setYearSelectionBarArrowsColorRes(R.color.custom_calendar_year_selection_arrows_color)
-     setYearSelectionBarTextColorRes(R.color.custom_calendar_year_selection_text_color)
      setDaysBarBackgroundColorRes(R.color.custom_calendar_days_bar_background)
      setDaysBarTextColorRes(R.color.custom_calendar_days_bar_text_color)
      setMonthTextColorRes(R.color.custom_calendar_month_text_color)

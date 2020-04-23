@@ -7,10 +7,6 @@
     <color name="custom_calendar_grid_color">#46d1aa</color>
     <color name="custom_calendar_month_text_color">#0f6c52</color>
 
-    <color name="custom_calendar_year_selection_background">#0f6c52</color>
-    <color name="custom_calendar_year_selection_arrows_color">#f2e81a</color>
-    <color name="custom_calendar_year_selection_text_color">#f2e81a</color>
-
     <color name="custom_calendar_days_bar_background">#0f6c52</color>
     <color name="custom_calendar_days_bar_text_color">#f2e81a</color>
 
@@ -20,7 +16,7 @@
     <color name="custom_calendar_date_pressed_text_color">#FFFFFF</color>
     <color name="custom_calendar_date_pressed_background">#33b18d</color>
 
-    <color name="custom_calendar_date_selected_text_color">#f2e81a</color>
+    <color name="custom_calendar_date_selected_text_color">#FF00CC</color>
     <color name="custom_calendar_date_selected_background">#0f6c52</color>
 
     <color name="custom_calendar_date_disabled_text_color">#757575</color>

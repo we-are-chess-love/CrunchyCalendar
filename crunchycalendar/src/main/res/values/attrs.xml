@@ -7,24 +7,24 @@
     </declare-styleable>
 
     <declare-styleable name="CalendarView">
-        <attr name="calendar_grid_on_selected_dates" format="boolean" />
-        <attr name="calendar_grid_color" format="color" />
+        <!-- Month -->
+        <attr name="calendar_month_text_color" format="color" />
+
+        <!-- Date Bar -->
         <attr name="calendar_day_bar_background" format="color" />
         <attr name="calendar_day_bar_text_color" format="color" />
-        <attr name="calendar_year_selection_background" format="color" />
-        <attr name="calendar_year_selection_arrows_color" format="color" />
-        <attr name="calendar_year_selection_text_color" format="color" />
-        <attr name="calendar_month_text_color" format="color" />
+
+        <!-- Dates Customization -->
         <attr name="calendar_date_background" format="reference" />
         <attr name="calendar_date_text_color" format="reference" />
         <attr name="calendar_dates_font" format="reference"/>
+        <attr name="calendar_selected_dates_background_color" format="color|reference"/>
     </declare-styleable>
 
     <declare-styleable name="CalendarDateStates">
         <attr name="calendar_state_today" format="boolean" />
         <attr name="calendar_state_selected" format="boolean" />
         <attr name="calendar_state_disabled" format="boolean" />
-        <attr name="calendar_state_weekend" format="boolean" />
     </declare-styleable>
 
 </resources>

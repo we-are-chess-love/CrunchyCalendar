@@ -11,49 +11,45 @@ import ru.cleverpumpkin.calendar.R
 internal object CalendarStyleAttributesReader {
 
     fun readStyleAttributes(
-        context: Context,
-        attrs: AttributeSet,
-        @AttrRes defStyleAttr: Int,
-        styleAttributes: CalendarStyleAttributes
+            context: Context,
+            attrs: AttributeSet,
+            @AttrRes defStyleAttr: Int,
+            styleAttributes: CalendarStyleAttributes
     ) {
         val typedArray =
-            context.obtainStyledAttributes(attrs, R.styleable.CalendarView, defStyleAttr, 0)
+                context.obtainStyledAttributes(attrs, R.styleable.CalendarView, defStyleAttr, 0)
 
         try {
             with(styleAttributes) {
-                drawGridOnSelectedDates = typedArray.getBoolean(
-                    R.styleable.CalendarView_calendar_grid_on_selected_dates,
-                    drawGridOnSelectedDates
-                )
-
-                gridColor = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_grid_color,
-                    gridColor
-                )
 
                 daysBarBackground = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_day_bar_background,
-                    daysBarBackground
+                        R.styleable.CalendarView_calendar_day_bar_background,
+                        daysBarBackground
                 )
 
                 daysBarTextColor = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_day_bar_text_color,
-                    daysBarTextColor
+                        R.styleable.CalendarView_calendar_day_bar_text_color,
+                        daysBarTextColor
                 )
 
                 monthTextColor = typedArray.getColor(
-                    R.styleable.CalendarView_calendar_month_text_color,
-                    monthTextColor
+                        R.styleable.CalendarView_calendar_month_text_color,
+                        monthTextColor
                 )
 
-                dateCellBackgroundColorRes = typedArray.getResourceId(
-                    R.styleable.CalendarView_calendar_date_background,
-                    dateCellBackgroundColorRes
+                selectedDateCellBackgroundColor = typedArray.getColor(
+                        R.styleable.CalendarView_calendar_selected_dates_background_color,
+                        selectedDateCellBackgroundColor
                 )
 
                 dateCellTextColorStateList = typedArray.getColorStateList(
-                    R.styleable.CalendarView_calendar_date_text_color
+                        R.styleable.CalendarView_calendar_date_text_color
                 ) ?: dateCellTextColorStateList
+
+                dateCellFont = typedArray.getResourceId(
+                        R.styleable.CalendarView_calendar_dates_font,
+                        dateCellFont
+                )
             }
         } finally {
             typedArray.recycle()

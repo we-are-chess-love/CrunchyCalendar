@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.FontRes
 import androidx.core.content.ContextCompat
 import ru.cleverpumpkin.calendar.R
 import ru.cleverpumpkin.calendar.extension.getColorInt
@@ -14,11 +15,6 @@ import ru.cleverpumpkin.calendar.extension.getColorInt
 internal class CalendarStyleAttributes(
     context: Context,
 
-    var drawGridOnSelectedDates: Boolean = false,
-
-    @ColorInt
-    var gridColor: Int = context.getColorInt(R.color.calendar_grid_color),
-
     @ColorInt
     var daysBarBackground: Int = context.getColorInt(R.color.calendar_days_bar_background),
 
@@ -28,8 +24,11 @@ internal class CalendarStyleAttributes(
     @ColorInt
     var monthTextColor: Int = context.getColorInt(R.color.calendar_month_text_color),
 
-    @DrawableRes
-    var dateCellBackgroundColorRes: Int = R.drawable.calendar_date_bg_selector,
+    @ColorInt
+    var selectedDateCellBackgroundColor: Int = context.getColorInt(R.color.calendar_date_selected_background),
+
+    @FontRes
+    var dateCellFont: Int = R.font.ptsans_regular,
 
     var dateCellTextColorStateList: ColorStateList = requireNotNull(
         ContextCompat.getColorStateList(context, R.color.calendar_date_text_selector)

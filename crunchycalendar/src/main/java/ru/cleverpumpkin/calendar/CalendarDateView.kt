@@ -4,10 +4,14 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.FontRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import ru.cleverpumpkin.calendar.extension.dpToPix
@@ -18,8 +22,7 @@ import ru.cleverpumpkin.calendar.extension.spToPix
  * This internal view class represents a single date cell of the Calendar with optional
  * colored indicators.
  *
- * This view class control its drawable state with [isToday], [isDateSelected], [isDateDisabled]
- * and [isWeekend] properties.
+ * This view class control its drawable state with [isToday], [isDateSelected] and [isDateDisabled] properties.
  */
 internal class CalendarDateView @JvmOverloads constructor(
     context: Context,
@@ -30,6 +33,7 @@ internal class CalendarDateView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_TEXT_SIZE = 14.0f
+        private const val BACKGROUND_RADIUS = 48.0f
 
         private val stateToday = intArrayOf(R.attr.calendar_state_today)
         private val stateDateSelected = intArrayOf(R.attr.calendar_state_selected)
@@ -42,6 +46,8 @@ internal class CalendarDateView @JvmOverloads constructor(
 
     private var dayNumberCalculatedWidth = 0.0f
     private var currentStateTextColor: Int = getColorInt(R.color.calendar_date_text_color)
+    private var selectedDateColor: Int = getColorInt(R.color.calendar_date_selected_background)
+    private var dateFont: Typeface? = null
 
     var textColorStateList: ColorStateList? = null
 
@@ -83,14 +89,17 @@ internal class CalendarDateView @JvmOverloads constructor(
 
     private fun Canvas.drawDayNumber() {
         textPaint.color = currentStateTextColor
+        dateFont?.let {
+            textPaint.typeface = it
+        }
 
         val xPos = width / 2.0f
         val yPos = height / 2.0f - (textPaint.descent() + textPaint.ascent()) / 2.0f
         val y = height / 2.0f
 
         if (isDateSelected) {
-            drawCircle(xPos, y, 48f, Paint().apply {
-                color = ContextCompat.getColor(context, R.color.calendar_date_selected_background)
+            drawCircle(xPos, y, BACKGROUND_RADIUS, Paint().apply {
+                color = selectedDateColor
             })
         }
 
@@ -123,10 +132,19 @@ internal class CalendarDateView @JvmOverloads constructor(
     override fun drawableStateChanged() {
         super.drawableStateChanged()
 
-        val stateList = textColorStateList
-        if (stateList != null) {
-            currentStateTextColor = stateList.getColorForState(drawableState, currentStateTextColor)
+        textColorStateList?.let {
+            currentStateTextColor = it.getColorForState(drawableState, currentStateTextColor)
         }
+    }
+
+    fun setSelectedDateBackgroundColor(@ColorInt color: Int) {
+        selectedDateColor = color
+        refreshDrawableState()
+    }
+
+    fun setDateFont(@FontRes font: Int) {
+        dateFont = ResourcesCompat.getFont(context, font)
+        refreshDrawableState()
     }
 
 }

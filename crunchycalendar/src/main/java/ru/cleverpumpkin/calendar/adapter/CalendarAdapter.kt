@@ -145,8 +145,9 @@ internal class CalendarAdapter(
 
         dateView.dayNumber = dayFormatter.format(date.date)
 
-        dateView.setBackgroundResource(styleAttributes.dateCellBackgroundColorRes)
         dateView.textColorStateList = styleAttributes.dateCellTextColorStateList
+        dateView.setSelectedDateBackgroundColor(styleAttributes.selectedDateCellBackgroundColor)
+        dateView.setDateFont(styleAttributes.dateCellFont)
     }
 
     private fun bindMonthItemViewHolder(holder: MonthItemViewHolder, monthItem: MonthItem) {

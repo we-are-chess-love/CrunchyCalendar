@@ -29,16 +29,11 @@ class CodeStylingDemoFragment : BaseFragment() {
         }
 
         with(calendarView) {
-            setDrawGridOnSelectedDates(drawGrid = true)
-            setGridColorRes(R.color.custom_calendar_grid_color)
 
             setDaysBarBackgroundColorRes(R.color.custom_calendar_days_bar_background)
             setDaysBarTextColorRes(R.color.custom_calendar_days_bar_text_color)
 
             setMonthTextColorRes(R.color.custom_calendar_month_text_color)
-
-            setDateCellBackgroundRes(R.drawable.custom_date_bg_selector)
-            setDateCellTextColorRes(R.color.custom_date_text_selector)
         }
 
         if (savedInstanceState == null) {

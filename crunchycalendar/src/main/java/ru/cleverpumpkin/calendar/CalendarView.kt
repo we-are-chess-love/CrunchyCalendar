@@ -19,7 +19,6 @@ import ru.cleverpumpkin.calendar.adapter.CalendarAdapter
 import ru.cleverpumpkin.calendar.adapter.CalendarItemsGenerator
 import ru.cleverpumpkin.calendar.adapter.manager.AdapterDataManager
 import ru.cleverpumpkin.calendar.adapter.manager.CalendarAdapterDataManager
-import ru.cleverpumpkin.calendar.decorations.GridDividerItemDecoration
 import ru.cleverpumpkin.calendar.decorations.NoItemDecoration
 import ru.cleverpumpkin.calendar.extension.getColorInt
 import ru.cleverpumpkin.calendar.selection.*
@@ -347,30 +346,6 @@ class CalendarView @JvmOverloads constructor(
             recyclerView.stopScroll()
         }
     }
-
-    /**
-     * Sets whether the calendar grid will be drawn over selected dates or not.
-     */
-    fun setDrawGridOnSelectedDates(drawGrid: Boolean) {
-        calendarStyleAttributes.drawGridOnSelectedDates = drawGrid
-        adapterDataManager.notifyDateItemsChanged()
-    }
-
-    /**
-     * Sets the calendar grid color.
-     */
-    fun setGridColor(@ColorInt color: Int) {
-        calendarStyleAttributes.gridColor = color
-        adapterDataManager.notifyDateItemsChanged()
-    }
-
-    /**
-     * Sets the calendar grid color resource.
-     */
-    fun setGridColorRes(@ColorRes colorRes: Int) {
-        setGridColor(getColorInt(colorRes))
-    }
-
     /**
      * Sets the days of week bar background color.
      */
@@ -412,14 +387,6 @@ class CalendarView @JvmOverloads constructor(
      */
     fun setMonthTextColorRes(@ColorRes colorRes: Int) {
         setMonthTextColor(getColorInt(colorRes))
-    }
-
-    /**
-     * Sets a date cell background resource.
-     */
-    fun setDateCellBackgroundRes(@DrawableRes drawableRes: Int) {
-        calendarStyleAttributes.dateCellBackgroundColorRes = drawableRes
-        calendarAdapter.notifyDataSetChanged()
     }
 
     /**
