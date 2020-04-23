@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarDateView
@@ -33,9 +34,10 @@ import java.util.*
  * [EMPTY_VIEW_TYPE] - empty view that represents start and end offset for each month
  */
 internal class CalendarAdapter(
-    private val styleAttributes: CalendarStyleAttributes,
-    private val dateInfoProvider: DateInfoProvider,
-    private val onDateClickListener: (CalendarDate, Boolean) -> Unit
+        private val context: Context,
+        private val styleAttributes: CalendarStyleAttributes,
+        private val dateInfoProvider: DateInfoProvider,
+        private val onDateClickListener: (CalendarDate, Boolean) -> Unit
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -104,7 +106,11 @@ internal class CalendarAdapter(
 
     private fun createMonthItemViewHolder(parent: ViewGroup): MonthItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.calendar_item_month, parent, false)
-        return MonthItemViewHolder(view as LinearLayout)
+        val viewHolder = MonthItemViewHolder(view as LinearLayout)
+
+        viewHolder.monthLabelTxv.typeface = ResourcesCompat.getFont(context, styleAttributes.monthLabelFont)
+
+        return viewHolder
     }
 
     private fun createEmptyItemViewHolder(context: Context): EmptyItemViewHolder {
@@ -141,7 +147,7 @@ internal class CalendarAdapter(
         dateView.isDateSelected = dateInfoProvider.isDateSelected(date)
 
         dateView.isDateDisabled =
-            dateInfoProvider.isDateOutOfRange(date) || dateInfoProvider.isDateSelectable(date).not()
+                dateInfoProvider.isDateOutOfRange(date) || dateInfoProvider.isDateSelectable(date).not()
 
         dateView.dayNumber = dayFormatter.format(date.date)
 
@@ -193,16 +199,16 @@ internal class CalendarAdapter(
 
     fun getDatesRange(dateFrom: CalendarDate, dateTo: CalendarDate): List<CalendarDate> {
         return calendarItems
-            .mapNotNull { item ->
-                if (item !is DateItem) {
-                    return@mapNotNull null
+                .mapNotNull { item ->
+                    if (item !is DateItem) {
+                        return@mapNotNull null
+                    }
+                    if (item.date in dateFrom..dateTo) {
+                        return@mapNotNull item.date
+                    } else {
+                        null
+                    }
                 }
-                if (item.date in dateFrom..dateTo) {
-                    return@mapNotNull item.date
-                } else {
-                    null
-                }
-            }
     }
 
     fun setCalendarItems(calendarItems: List<CalendarItem>) {
@@ -225,7 +231,8 @@ internal class CalendarAdapter(
 
     class MonthItemViewHolder(val monthLayout: LinearLayout) : RecyclerView.ViewHolder(monthLayout) {
 
-        private val daysBar: DaysBarView = monthLayout.findViewById(R.id.calendar_days_bar_view)
+        val daysBar: DaysBarView = monthLayout.findViewById(R.id.calendar_days_bar_view)
+        val monthLabelTxv: TextView = monthLayout.findViewById(R.id.calendar_month)
 
         init {
             daysBar.setupDaysBarView(Calendar.getInstance().firstDayOfWeek)

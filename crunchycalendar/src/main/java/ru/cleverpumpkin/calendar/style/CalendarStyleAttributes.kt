@@ -30,6 +30,9 @@ internal class CalendarStyleAttributes(
     @FontRes
     var dateCellFont: Int = R.font.ptsans_regular,
 
+    @FontRes
+    var monthLabelFont: Int = R.font.ptsans_regular,
+
     var dateCellTextColorStateList: ColorStateList = requireNotNull(
         ContextCompat.getColorStateList(context, R.color.calendar_date_text_selector)
     )

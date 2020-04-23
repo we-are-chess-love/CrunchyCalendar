@@ -10,7 +10,6 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.collection.ArrayMap
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,9 +43,9 @@ import java.util.*
  * to save and restore its internal state.
  */
 class CalendarView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    @AttrRes defStyleAttr: Int = R.attr.calendarViewStyle
+        context: Context,
+        attrs: AttributeSet? = null,
+        @AttrRes defStyleAttr: Int = R.attr.calendarViewStyle
 
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
@@ -209,7 +208,7 @@ class CalendarView @JvmOverloads constructor(
      */
     val selectedDate: CalendarDate?
         get() = dateSelectionStrategy.getSelectedDates()
-            .firstOrNull()
+                .firstOrNull()
 
     /**
      * Init block where we read custom attributes and set up internal views.
@@ -221,24 +220,25 @@ class CalendarView @JvmOverloads constructor(
 
         if (attrs != null) {
             CalendarStyleAttributesReader.readStyleAttributes(
-                context = context,
-                attrs = attrs,
-                defStyleAttr = defStyleAttr,
-                styleAttributes = calendarStyleAttributes
+                    context = context,
+                    attrs = attrs,
+                    defStyleAttr = defStyleAttr,
+                    styleAttributes = calendarStyleAttributes
             )
         }
 
         calendarAdapter = CalendarAdapter(
-            styleAttributes = calendarStyleAttributes,
-            dateInfoProvider = dateInfoProvider,
-            onDateClickListener = { date, longClick ->
-                if (longClick) {
-                    onDateLongClickListener?.invoke(date)
-                } else {
-                    dateSelectionStrategy.onDateSelected(date)
-                    onDateClickListener?.invoke(date)
+                context,
+                styleAttributes = calendarStyleAttributes,
+                dateInfoProvider = dateInfoProvider,
+                onDateClickListener = { date, longClick ->
+                    if (longClick) {
+                        onDateLongClickListener?.invoke(date)
+                    } else {
+                        dateSelectionStrategy.onDateSelected(date)
+                        onDateClickListener?.invoke(date)
+                    }
                 }
-            }
         )
 
         adapterDataManager = CalendarAdapterDataManager(calendarAdapter)
@@ -279,12 +279,12 @@ class CalendarView @JvmOverloads constructor(
      * Default value - true.
      */
     fun setupCalendar(
-        initialDate: CalendarDate = CalendarDate.today,
-        minDate: CalendarDate? = null,
-        maxDate: CalendarDate? = null,
-        selectionMode: SelectionMode = SelectionMode.NONE,
-        selectedDates: List<CalendarDate> = emptyList(),
-        firstDayOfWeek: Int? = null
+            initialDate: CalendarDate = CalendarDate.today,
+            minDate: CalendarDate? = null,
+            maxDate: CalendarDate? = null,
+            selectionMode: SelectionMode = SelectionMode.NONE,
+            selectedDates: List<CalendarDate> = emptyList(),
+            firstDayOfWeek: Int? = null
 
     ) {
         if (minDate != null && maxDate != null && minDate > maxDate) {
@@ -305,9 +305,9 @@ class CalendarView @JvmOverloads constructor(
         updateSelectedDatesInternal(selectedDates)
 
         displayedDatesRange = DisplayedDatesRangeFactory.getDisplayedDatesRange(
-            initialDate = initialDate,
-            minDate = minDate,
-            maxDate = maxDate
+                initialDate = initialDate,
+                minDate = minDate,
+                maxDate = maxDate
         )
 
         generateCalendarItems(displayedDatesRange)
@@ -323,7 +323,7 @@ class CalendarView @JvmOverloads constructor(
         val (minDate, maxDate) = minMaxDatesRange
 
         if ((minDate != null && date < minDate.monthBeginning()) ||
-            (maxDate != null && date > maxDate.monthEnd())) {
+                (maxDate != null && date > maxDate.monthEnd())) {
             return
         }
 
@@ -331,9 +331,9 @@ class CalendarView @JvmOverloads constructor(
 
         if (date.isBetween(dateFrom = displayDatesFrom, dateTo = displayDatesTo).not()) {
             displayedDatesRange = DisplayedDatesRangeFactory.getDisplayedDatesRange(
-                initialDate = date,
-                minDate = minDate,
-                maxDate = maxDate
+                    initialDate = date,
+                    minDate = minDate,
+                    maxDate = maxDate
             )
 
             generateCalendarItems(displayedDatesRange)
@@ -346,6 +346,7 @@ class CalendarView @JvmOverloads constructor(
             recyclerView.stopScroll()
         }
     }
+
     /**
      * Sets the days of week bar background color.
      */
@@ -450,26 +451,26 @@ class CalendarView @JvmOverloads constructor(
         when {
             selectionMode == SelectionMode.NONE -> {
                 throw IllegalArgumentException(
-                    "You cannot define selected dates when the SelectionMode is NONE"
+                        "You cannot define selected dates when the SelectionMode is NONE"
                 )
             }
 
             selectionMode == SelectionMode.SINGLE && selectedDates.size > 1 -> {
                 throw IllegalArgumentException(
-                    "You cannot define more than one selected dates when the SelectionMode is SINGLE"
+                        "You cannot define more than one selected dates when the SelectionMode is SINGLE"
                 )
             }
 
             selectionMode == SelectionMode.RANGE && selectedDates.size != 2 -> {
                 throw IllegalArgumentException(
-                    "You must define two selected dates (start and end) when the SelectionMode is RANGE"
+                        "You must define two selected dates (start and end) when the SelectionMode is RANGE"
                 )
             }
         }
 
         selectedDates.forEach { date ->
             if (dateInfoProvider.isDateOutOfRange(date).not() &&
-                dateInfoProvider.isDateSelectable(date)
+                    dateInfoProvider.isDateSelectable(date)
             ) {
                 dateSelectionStrategy.onDateSelected(date)
             }
@@ -500,13 +501,13 @@ class CalendarView @JvmOverloads constructor(
             itemAnimator = null
 
             recycledViewPool.setMaxRecycledViews(
-                CalendarAdapter.DATE_VIEW_TYPE,
-                MAX_RECYCLED_DAY_VIEWS
+                    CalendarAdapter.DATE_VIEW_TYPE,
+                    MAX_RECYCLED_DAY_VIEWS
             )
 
             recycledViewPool.setMaxRecycledViews(
-                CalendarAdapter.EMPTY_VIEW_TYPE,
-                MAX_RECYCLED_EMPTY_VIEWS
+                    CalendarAdapter.EMPTY_VIEW_TYPE,
+                    MAX_RECYCLED_EMPTY_VIEWS
             )
 
             addItemDecoration(NoItemDecoration())
@@ -520,8 +521,8 @@ class CalendarView @JvmOverloads constructor(
         }
 
         val calendarItems = calendarItemsGenerator.generateCalendarItems(
-            dateFrom = datesRange.dateFrom,
-            dateTo = datesRange.dateTo
+                dateFrom = datesRange.dateFrom,
+                dateTo = datesRange.dateTo
         )
 
         calendarAdapter.setCalendarItems(calendarItems)
@@ -550,8 +551,8 @@ class CalendarView @JvmOverloads constructor(
         }
 
         val calendarItems = calendarItemsGenerator.generateCalendarItems(
-            dateFrom = generateDatesFrom,
-            dateTo = generateDatesTo
+                dateFrom = generateDatesFrom,
+                dateTo = generateDatesTo
         )
 
         calendarAdapter.addPrevCalendarItems(calendarItems)
@@ -580,8 +581,8 @@ class CalendarView @JvmOverloads constructor(
         }
 
         val calendarItems = calendarItemsGenerator.generateCalendarItems(
-            dateFrom = generateDatesFrom,
-            dateTo = generateDatesTo
+                dateFrom = generateDatesFrom,
+                dateTo = generateDatesTo
         )
 
         calendarAdapter.addNextCalendarItems(calendarItems)
@@ -620,7 +621,8 @@ class CalendarView @JvmOverloads constructor(
             }
 
             selectionMode = state.getSerializable(BUNDLE_SELECTION_MODE) as SelectionMode
-            displayedDatesRange = state.getParcelable(BUNDLE_DISPLAY_DATE_RANGE) ?: DatesRange.emptyRange()
+            displayedDatesRange = state.getParcelable(BUNDLE_DISPLAY_DATE_RANGE)
+                    ?: DatesRange.emptyRange()
             minMaxDatesRange = state.getParcelable(BUNDLE_LIMIT_DATE_RANGE) ?: NullableDatesRange()
             firstDayOfWeek = state.getInt(BUNDLE_FIRST_DAY_OF_WEEK, -1).takeIf { it != -1 }
             dateSelectionStrategy.restoreSelectedDates(state)

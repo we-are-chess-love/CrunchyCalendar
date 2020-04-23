@@ -37,6 +37,11 @@ internal object CalendarStyleAttributesReader {
                         monthTextColor
                 )
 
+                monthLabelFont = typedArray.getResourceId(
+                        R.styleable.CalendarView_calendar_month_font,
+                        monthLabelFont
+                )
+
                 selectedDateCellBackgroundColor = typedArray.getColor(
                         R.styleable.CalendarView_calendar_selected_dates_background_color,
                         selectedDateCellBackgroundColor
